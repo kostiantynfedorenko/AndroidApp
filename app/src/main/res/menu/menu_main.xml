@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_add"
+        android:orderInCategory="100"
+        android:title="@string/action_add"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/choice_menu"
+        android:title="@string/adapter_choice">
+        <item
+            android:id="@+id/custom_adapter"
+            android:title="@string/custom_adapter" />
+        <item
+            android:id="@+id/simple_adapter"
+            android:title="@string/simple_adapter" />
+        <item
+            android:id="@+id/cursor_adapter"
+            android:title="@string/cursor_adapter" />
+    </item>
+</menu>
