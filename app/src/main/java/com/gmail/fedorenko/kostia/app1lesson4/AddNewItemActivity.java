@@ -32,6 +32,7 @@ import java.util.Calendar;
 public class AddNewItemActivity extends ActionBarActivity implements RegionPickerFragment.RegionPickerListener {
     private static final int REQUEST_CODE_NEW_IMAGE = 1;
 
+    private Boolean useSpinner;
     private ImageView picture;
     private Button setDate;
     private Button setTime;
@@ -63,6 +64,7 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
         setTime.setOnClickListener(onSetTimeClick());
         setRegion.setOnClickListener(onSetRegionClick());
 
+  //      if (useSpinner){
    //     spinner = (Spinner) findViewById(R.id.region_spinner);
 
    //     ArrayAdapter<CharSequence> adapterSp = ArrayAdapter.createFromResource(this,
