@@ -101,6 +101,9 @@ public class MainActivity extends ActionBarActivity {
                 Intent i = new Intent(MainActivity.this, AddNewItemActivity.class);
                 startActivityForResult(i, REQUEST_CODE_NEW_ITEM);
                 break;
+            case R.id.action_settings:
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new MyPreferencesFragment()).commit();
             case R.id.custom_adapter:
                 useCustomAdapter();
                 Toast.makeText(getApplicationContext(),"Using custom adapter...",Toast.LENGTH_SHORT).show();
