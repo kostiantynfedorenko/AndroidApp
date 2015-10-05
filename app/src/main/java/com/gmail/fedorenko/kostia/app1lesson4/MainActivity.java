@@ -103,8 +103,8 @@ public class MainActivity extends ActionBarActivity {
                 startActivityForResult(i, REQUEST_CODE_NEW_ITEM);
                 break;
             case R.id.action_settings:
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new MyPreferencesFragment()).commit();
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.custom_adapter:
                 useCustomAdapter();
