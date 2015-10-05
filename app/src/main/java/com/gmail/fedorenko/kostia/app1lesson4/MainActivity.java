@@ -3,6 +3,7 @@ package com.gmail.fedorenko.kostia.app1lesson4;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.preference.PreferenceActivity;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -104,6 +105,7 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
                         .replace(android.R.id.content, new MyPreferencesFragment()).commit();
+                break;
             case R.id.custom_adapter:
                 useCustomAdapter();
                 Toast.makeText(getApplicationContext(),"Using custom adapter...",Toast.LENGTH_SHORT).show();

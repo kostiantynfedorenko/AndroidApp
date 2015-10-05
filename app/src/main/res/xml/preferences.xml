@@ -4,5 +4,7 @@
         android:defaultValue="false"
         android:key="use_spinner"
         android:summary="Check if Spinner should be used"
-        android:title="Spinner" />
+        android:title="Spinner"
+        android:background="@android:color/holo_orange_dark"
+        />
 </PreferenceScreen>
