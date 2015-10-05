@@ -3,6 +3,7 @@ package com.gmail.fedorenko.kostia.app1lesson4;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.preference.PreferenceActivity;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -100,6 +101,10 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_add:
                 Intent i = new Intent(MainActivity.this, AddNewItemActivity.class);
                 startActivityForResult(i, REQUEST_CODE_NEW_ITEM);
+                break;
+            case R.id.action_settings:
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.custom_adapter:
                 useCustomAdapter();

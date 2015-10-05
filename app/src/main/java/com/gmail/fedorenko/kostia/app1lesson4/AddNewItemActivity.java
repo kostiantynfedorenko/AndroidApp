@@ -6,8 +6,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
@@ -42,7 +44,7 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
     private EditText desc;
     private Bitmap image;
     private TextView regionView;
- //   private Spinner spinner;
+    private Spinner spinner;
     private String regionFromPicker;
 
     @Override
@@ -64,14 +66,19 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
         setTime.setOnClickListener(onSetTimeClick());
         setRegion.setOnClickListener(onSetRegionClick());
 
-  //      if (useSpinner){
-   //     spinner = (Spinner) findViewById(R.id.region_spinner);
+        SharedPreferences preferencesSet = PreferenceManager.getDefaultSharedPreferences(this);
+        useSpinner = preferencesSet.getBoolean("use_spinner", false);
 
-   //     ArrayAdapter<CharSequence> adapterSp = ArrayAdapter.createFromResource(this,
-   //             R.array.regions_array, android.R.layout.simple_spinner_item);
-   //     adapterSp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    //    spinner.setAdapter(adapterSp);
-    //    regionFromPicker = spinner.getSelectedItem().toString()
+        if (useSpinner) {
+            spinner = (Spinner) findViewById(R.id.region_spinner);
+            spinner.setVisibility(View.VISIBLE);
+            setRegion.setVisibility(View.GONE);
+            ArrayAdapter<CharSequence> adapterSp = ArrayAdapter.createFromResource(this,
+                    R.array.regions_array, android.R.layout.simple_spinner_item);
+            adapterSp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapterSp);
+            regionFromPicker = spinner.getSelectedItem().toString();
+        }
     }
 
     private View.OnClickListener onImageClick() {
