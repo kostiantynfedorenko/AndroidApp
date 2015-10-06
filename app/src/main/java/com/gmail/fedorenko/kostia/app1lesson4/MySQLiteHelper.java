@@ -11,11 +11,12 @@ import android.util.Log;
 import java.sql.SQLException;
 import java.util.ArrayList;
 //GITTEST
+
 /**
  * Created by kfedoren on 22.09.2015.
  */
 public class MySQLiteHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "testtable";
     private static final String TAG = "MySQLiteHelper";
 
@@ -32,7 +33,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 Item.KEY_TIME + " TEXT, " +
                 Item.KEY_DATE + " TEXT, " +
                 Item.KEY_IMAGE + " BLOB, " +
-                Item.KEY_REGION + " TEXT )";
+                Item.KEY_REGION + " TEXT, " +
+                Item.KEY_URI + " TEXT)";
 
         //create table
         db.execSQL(CREATE_ITEM_TABLE);
@@ -50,15 +52,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             values.put(item.KEY_DATE, item.getDate());
             values.put(item.KEY_IMAGE, Util.bitmapToByteArray(item.getImage()));
             values.put(item.KEY_REGION, item.getRegion());
+            values.put(item.KEY_URI, item.getUri());
             //Insert
             db.insert(item.TABLE_NAME, null, values);
             //close
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             Log.e(TAG, ex.toString());
-        }
-        finally {
-            if(null != db){ db.close(); }
+        } finally {
+            if (null != db) {
+                db.close();
+            }
         }
 
     }
@@ -68,27 +71,28 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + Item.TABLE_NAME;
         SQLiteDatabase db = null;
         try {
-        db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        Item item = null;
-        if (cursor.moveToFirst()) {
-            do {
-                item = new Item();
-                item.setId(Integer.parseInt(cursor.getString(0)));
-                item.setPlace(cursor.getString(1));
-                item.setTime(cursor.getString(2));
-                item.setDate(cursor.getString(3));
-                item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
-                item.setRegion(cursor.getString(5));
-                items.add(item);
-            } while (cursor.moveToNext());
-        }
-        }
-        catch (Exception ex){
+            db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            Item item = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    item = new Item();
+                    item.setId(Integer.parseInt(cursor.getString(0)));
+                    item.setPlace(cursor.getString(1));
+                    item.setTime(cursor.getString(2));
+                    item.setDate(cursor.getString(3));
+                    item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
+                    item.setRegion(cursor.getString(5));
+                    item.setUri(cursor.getString(6));
+                    items.add(item);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception ex) {
             Log.e(TAG, ex.toString());
-        }
-        finally {
-            if(null != db){ db.close(); }
+        } finally {
+            if (null != db) {
+                db.close();
+            }
         }
         return items;
     }
@@ -100,23 +104,24 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         try {
             db = this.getWritableDatabase();
 
-        // 2. create ContentValues to add key "column"/value
-        ContentValues values = new ContentValues();
-        values.put(item.KEY_PLACE, item.getPlace());
-        values.put(item.KEY_TIME, item.getTime());
-        values.put(item.KEY_DATE, item.getDate());
-        values.put(item.KEY_IMAGE, Util.bitmapToByteArray(item.getImage()));
-        values.put(item.KEY_REGION, item.getRegion());
+            // 2. create ContentValues to add key "column"/value
+            ContentValues values = new ContentValues();
+            values.put(item.KEY_PLACE, item.getPlace());
+            values.put(item.KEY_TIME, item.getTime());
+            values.put(item.KEY_DATE, item.getDate());
+            values.put(item.KEY_IMAGE, Util.bitmapToByteArray(item.getImage()));
+            values.put(item.KEY_REGION, item.getRegion());
+            values.put(item.KEY_URI, item.getUri());
 
-        // 3. updating row
-        i = db.update(item.TABLE_NAME, values, item.KEY_ID + " = ?",
-                new String[]{String.valueOf(item.getId())});
-        }
-        catch (Exception ex){
+            // 3. updating row
+            i = db.update(item.TABLE_NAME, values, item.KEY_ID + " = ?",
+                    new String[]{String.valueOf(item.getId())});
+        } catch (Exception ex) {
             Log.e(TAG, ex.toString());
-        }
-        finally {
-            if(null != db){ db.close(); }
+        } finally {
+            if (null != db) {
+                db.close();
+            }
         }
         return i;
     }
@@ -127,16 +132,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         try {
             db = this.getWritableDatabase();
 
-        // 2. delete
-        db.delete(item.TABLE_NAME, item.KEY_ID + " = ?", new String[]{String.valueOf(item.getId())});
+            // 2. delete
+            db.delete(item.TABLE_NAME, item.KEY_ID + " = ?", new String[]{String.valueOf(item.getId())});
 
-        // 3. close
-        }
-        catch (Exception ex){
+            // 3. close
+        } catch (Exception ex) {
             Log.e(TAG, ex.toString());
-        }
-        finally {
-            if(null != db){ db.close(); }
+        } finally {
+            if (null != db) {
+                db.close();
+            }
         }
         Log.d("deleteItem(" + item.getId() + ")", item.toString());
     }
@@ -154,38 +159,39 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = null;
         Item item = null;
         try {
-        db = this.getReadableDatabase();
+            db = this.getReadableDatabase();
 
-        // 2. build query
-        Cursor cursor = db.query(Item.TABLE_NAME, // a. table
-                Item.COLUMNS, // b. column names
-                " id = ?", // c. selections
-                new String[]{String.valueOf(id)}, // d. selections args
-                null, // e. group by - how to group rows
-                null, // f. having - which row groups to include (filter)
-                null, // g. order by
-                null); // h. limit
+            // 2. build query
+            Cursor cursor = db.query(Item.TABLE_NAME, // a. table
+                    Item.COLUMNS, // b. column names
+                    " id = ?", // c. selections
+                    new String[]{String.valueOf(id)}, // d. selections args
+                    null, // e. group by - how to group rows
+                    null, // f. having - which row groups to include (filter)
+                    null, // g. order by
+                    null); // h. limit
 
-        // 3. if we got results get the first one
-        if (cursor != null)
-            cursor.moveToFirst();
+            // 3. if we got results get the first one
+            if (cursor != null)
+                cursor.moveToFirst();
 
-        // 4. build ad object
-        item = new Item();
-        item.setId(Integer.parseInt(cursor.getString(0)));
-        item.setPlace(cursor.getString(1));
-        item.setTime(cursor.getString(2));
-        item.setDate(cursor.getString(3));
-        item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
-        item.setRegion(cursor.getString(5));
+            // 4. build ad object
+            item = new Item();
+            item.setId(Integer.parseInt(cursor.getString(0)));
+            item.setPlace(cursor.getString(1));
+            item.setTime(cursor.getString(2));
+            item.setDate(cursor.getString(3));
+            item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
+            item.setRegion(cursor.getString(5));
+            item.setUri(cursor.getString(6));
 
-        Log.d("getItem(" + id + ")", item.toString());
-        }
-        catch (Exception ex){
+            Log.d("getItem(" + id + ")", item.toString());
+        } catch (Exception ex) {
             Log.e(TAG, ex.toString());
-        }
-        finally {
-            if(null != db){ db.close(); }
+        } finally {
+            if (null != db) {
+                db.close();
+            }
         }
         return item;
     }
@@ -197,36 +203,37 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         try {
             db = this.getReadableDatabase();
 
-        // 2. build query
-        Cursor cursor = db.query(Item.TABLE_NAME, // a. table
-                Item.COLUMNS, // b. column names
-                " place = ?", // c. selections
-                new String[]{desc}, // d. selections args
-                null, // e. group by - how to group rows
-                null, // f. having - which row groups to include (filter)
-                null, // g. order by
-                null); // h. limit
+            // 2. build query
+            Cursor cursor = db.query(Item.TABLE_NAME, // a. table
+                    Item.COLUMNS, // b. column names
+                    " place = ?", // c. selections
+                    new String[]{desc}, // d. selections args
+                    null, // e. group by - how to group rows
+                    null, // f. having - which row groups to include (filter)
+                    null, // g. order by
+                    null); // h. limit
 
-        // 3. if we got results get the first one
-        if (cursor != null)
-            cursor.moveToFirst();
+            // 3. if we got results get the first one
+            if (cursor != null)
+                cursor.moveToFirst();
 
-        // 4. build ad object
-        item = new Item();
-        item.setId(Integer.parseInt(cursor.getString(0)));
-        item.setPlace(cursor.getString(1));
-        item.setTime(cursor.getString(2));
-        item.setDate(cursor.getString(3));
-        item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
-        item.setRegion(cursor.getString(5));
+            // 4. build ad object
+            item = new Item();
+            item.setId(Integer.parseInt(cursor.getString(0)));
+            item.setPlace(cursor.getString(1));
+            item.setTime(cursor.getString(2));
+            item.setDate(cursor.getString(3));
+            item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
+            item.setRegion(cursor.getString(5));
+            item.setUri(cursor.getString(6));
 
-        Log.d("getItem(" + desc + ")", item.toString());
-        }
-        catch (Exception ex){
+            Log.d("getItem(" + desc + ")", item.toString());
+        } catch (Exception ex) {
             Log.e(TAG, ex.toString());
-        }
-        finally {
-            if(null != db){ db.close(); }
+        } finally {
+            if (null != db) {
+                db.close();
+            }
         }
         return item;
     }

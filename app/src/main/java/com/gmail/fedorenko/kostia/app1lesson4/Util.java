@@ -1,13 +1,19 @@
 package com.gmail.fedorenko.kostia.app1lesson4;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 //GITTEST
@@ -40,7 +46,6 @@ public class Util {
 
     private static final String LOG_TAG = "Util";
 
-    /* Перевірка, чи доступне зовнішнє сховище для читання та запису */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -49,7 +54,6 @@ public class Util {
         return false;
     }
 
-    /* Перевірка, чи доступне зовнішнє сховище принаймі для читання */
     public boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) ||
@@ -59,7 +63,6 @@ public class Util {
         return false;
     }
     public File getAlbumStorageDir(String albumName) {
-        // Отримати каталог для публічного каталогу фотографій користувача.
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), albumName);
         if (!file.mkdirs()) {
@@ -69,7 +72,6 @@ public class Util {
     }
 
     public File getAlbumStorageDir(Context context, String albumName) {
-        // Отримати каталог для приватного каталогу зображень додатку.
         File file = new File(context.getExternalFilesDir(
                 Environment.DIRECTORY_PICTURES), albumName);
         if (!file.mkdirs()) {
@@ -77,4 +79,28 @@ public class Util {
         }
         return file;
     }
+
+
+    public static Bitmap grabImage(Context context, ImageView imageView, Uri mImageUri) {
+        context.getContentResolver().notifyChange(mImageUri, null);
+        ContentResolver cr = context.getContentResolver();
+        Bitmap bitmap = null;
+        try {
+            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
+            imageView.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "Failed to load", e);
+        }
+        return bitmap;
+    }
+
+    public static File createTemporaryFile(String part, String ext) throws Exception {
+        File tempDir = Environment.getExternalStorageDirectory();
+        tempDir = new File(tempDir.getAbsolutePath() + "/tempAndApp/");
+        if (!tempDir.exists()) {
+            tempDir.mkdir();
+        }
+        return File.createTempFile(part, ext, tempDir);
+    }
+
 }

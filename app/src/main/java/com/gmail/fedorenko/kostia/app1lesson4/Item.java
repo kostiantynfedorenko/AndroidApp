@@ -21,25 +21,36 @@ public class Item implements Parcelable {
     public static final String KEY_DATE = "date";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_REGION = "region";
+    public static final String KEY_URI = "uri";
 
-    public static final String[] COLUMNS = {KEY_ID, KEY_PLACE, KEY_TIME, KEY_DATE, KEY_IMAGE, KEY_REGION};
+    public static final String[] COLUMNS = {KEY_ID, KEY_PLACE, KEY_TIME, KEY_DATE, KEY_IMAGE, KEY_REGION, KEY_URI};
 
     private int id;
     private String place;
     private String time;
     private String date;
     private String region;
+    private String uri;
     private Bitmap image;
 
     public Item() {
     }
 
-    public Item(String place, String time, String date, Bitmap image, String region) {
+    public Item(String place, String time, String date, Bitmap image, String region, String uri) {
         this.place = place;
         this.time = time;
         this.date = date;
         this.image = image;
         this.region = region;
+        this.uri = uri;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public int getId() {
@@ -92,7 +103,7 @@ public class Item implements Parcelable {
 
     @Override
     public String toString() {
-        return "Item: Description - " + this.place + ";Date - " + this.date + ";Time - " + this.time + ";ID - " + this.getId() + ";Reigon - " + this.region;
+        return "Item: Description - " + this.place + ";Date - " + this.date + ";Time - " + this.time + ";ID - " + this.getId() + ";Region - " + this.region + ";URI - " + this.uri;
     }
 
     @Override
@@ -109,12 +120,13 @@ public class Item implements Parcelable {
     }
 
     public Item(Parcel in) {
-        String[] dataString = new String[4];
+        String[] dataString = new String[5];
         in.readStringArray(dataString);
         this.place = dataString[0];
         this.time = dataString[1];
         this.date = dataString[2];
         this.region = dataString[3];
+        this.uri = dataString[4];
         int[] dataInt = new int[2];
         in.readIntArray(dataInt);
         this.id = dataInt[0];
@@ -130,7 +142,8 @@ public class Item implements Parcelable {
                 this.place,
                 this.time,
                 this.date,
-                this.region
+                this.region,
+                this.uri
         });
         dest.writeIntArray(new int[]{
                 this.id,

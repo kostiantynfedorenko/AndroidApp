@@ -8,11 +8,15 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,14 +30,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 //GITTEST
 /**
  * Created by kfedoren on 17.09.2015.
  */
 public class AddNewItemActivity extends ActionBarActivity implements RegionPickerFragment.RegionPickerListener {
     private static final int REQUEST_CODE_NEW_IMAGE = 1;
-
+    private static final String TAG = "AddNewItemActivity";
     private Boolean useSpinner;
     private ImageView picture;
     private Button setDate;
@@ -46,6 +53,7 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
     private TextView regionView;
     private Spinner spinner;
     private String regionFromPicker;
+    private Uri mImageUri = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,18 +129,37 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
     }
 
     public void takePicture() {
-        Intent intent = new Intent();
-        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_CODE_NEW_IMAGE);
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo;
+        try
+        {
+            // place where to store camera taken picture
+            photo = Util.createTemporaryFile("picture_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()), ".jpg");
+            photo.delete();
         }
+        catch(Exception e)
+        {
+            Log.v(TAG, "Can't create file to take picture!");
+            Toast.makeText(getApplicationContext(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG);
+            return;
+        }
+        mImageUri = Uri.fromFile(photo);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        //start camera intent
+        startActivityForResult(intent, REQUEST_CODE_NEW_IMAGE);
+
+ //       intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+  //      if (intent.resolveActivity(getPackageManager()) != null) {
+   //         startActivityForResult(intent, REQUEST_CODE_NEW_IMAGE);
+    //    }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_NEW_IMAGE && resultCode == RESULT_OK) {
-            image = data.getParcelableExtra("data");
-            picture.setImageBitmap(image);
+            Util.grabImage(getApplicationContext(),picture,mImageUri);
+            Toast.makeText(getApplicationContext(), mImageUri.toString(), Toast.LENGTH_LONG).show();
+            image = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mImageUri.getPath()), 100, 100);
         }
     }
 
@@ -184,7 +211,7 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
             case R.id.action_save:
                 Intent intent = new Intent();
                 if (image != null && date.getText().toString().length() > 0 && time.getText().toString().length() > 0 && desc.getText().toString().length() > 0) {
-                    intent.putExtra("item", new Item(desc.getText().toString(), time.getText().toString(), date.getText().toString(), image, regionFromPicker));
+                    intent.putExtra("item", new Item(desc.getText().toString(), time.getText().toString(), date.getText().toString(), image, regionFromPicker, mImageUri.toString()));
                     setResult(RESULT_OK, intent);
                     finish();
                 } else {

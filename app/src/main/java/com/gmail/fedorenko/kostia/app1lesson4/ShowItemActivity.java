@@ -2,6 +2,7 @@ package com.gmail.fedorenko.kostia.app1lesson4;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -43,7 +44,8 @@ public class ShowItemActivity extends ActionBarActivity {
         showdesc = (TextView) findViewById(R.id.show_desc);
         showregion = (TextView) findViewById(R.id.show_region);
 
-        showimage.setImageBitmap(itemShow.getImage());
+  //      showimage.setImageBitmap(itemShow.getImage());
+        showimage.setImageURI(Uri.parse(itemShow.getUri()));
         showdate.setText("Date: " + itemShow.getDate());
         showtime.setText("Time: " + itemShow.getTime());
         showdesc.setText("Description: " +itemShow.getPlace());
