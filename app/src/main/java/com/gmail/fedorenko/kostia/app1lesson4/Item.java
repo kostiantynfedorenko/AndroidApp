@@ -131,13 +131,16 @@ public class Item implements Parcelable {
                 this.region,
                 this.uri
         });
+        dest.writeIntArray(new int[]{
+                this.id});
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
-        public Item createFromParcel(Parcel in){
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Item createFromParcel(Parcel in) {
             return new Item(in);
         }
-        public Item[] newArray(int size){
+
+        public Item[] newArray(int size) {
             return new Item[size];
         }
     };

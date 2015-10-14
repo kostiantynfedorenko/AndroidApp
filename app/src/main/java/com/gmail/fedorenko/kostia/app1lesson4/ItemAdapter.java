@@ -3,6 +3,7 @@ package com.gmail.fedorenko.kostia.app1lesson4;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 //GITTEST
@@ -43,7 +46,53 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 
         place.setText(placeStr);
         dateTime.setText("On: " + dateStr + "; at: " + timeStr);
+
+ //       new LoadImageAsT(icon, context).execute(values.get(position).getUri().toString());
         icon.setImageURI(Uri.parse(values.get(position).getUri()));
+
         return rowView;
+    }
+
+    class LoadImageAsT extends AsyncTask<String,Void,Bitmap>{
+        private final WeakReference<ImageView> imageViewReference;
+        private final Context context;
+
+        public LoadImageAsT(ImageView imageView, Context context) {
+
+            this.context = context;
+            this.imageViewReference = new WeakReference<ImageView>(imageView);
+
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            String filepath = params[0];
+
+            try {
+
+                File photo = new File(filepath);
+                Uri mImageUri = Uri.fromFile(photo);
+                return Util.getBitmapFromUri(context, mImageUri, 4);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null)
+                    imageView.setImageBitmap(bitmap);
+
+            }
+
+        }
     }
 }

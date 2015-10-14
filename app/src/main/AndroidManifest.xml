@@ -3,6 +3,7 @@
     package="com.gmail.fedorenko.kostia.app1lesson4">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-sdk android:minSdkVersion="14" />
     <application
         android:hardwareAccelerated="false"
         android:largeHeap="true"

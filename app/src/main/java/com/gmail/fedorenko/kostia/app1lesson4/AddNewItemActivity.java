@@ -207,7 +207,7 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
             case R.id.action_save:
                 Intent intent = new Intent();
                 if (image != null && date.getText().toString().length() > 0 && time.getText().toString().length() > 0 && desc.getText().toString().length() > 0) {
-                    intent.putExtra("item", new Item(desc.getText().toString(), time.getText().toString(), date.getText().toString(), image, regionFromPicker, mImageUri.toString()));
+                    intent.putExtra("item", new Item(desc.getText().toString(), time.getText().toString(), date.getText().toString(), regionFromPicker, mImageUri.toString()));
                     setResult(RESULT_OK, intent);
                     finish();
                 } else {

@@ -2,6 +2,7 @@ package com.gmail.fedorenko.kostia.app1lesson4;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -103,4 +104,17 @@ public class Util {
         return File.createTempFile(part, ext, tempDir);
     }
 
+    public static Bitmap getBitmapFromUri(Context context, Uri mImageUri, int inSampleSize) throws Exception {
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //if OutOfMemory Exception appears - read http://stackoverflow.com/questions/24135445/pre-guess-size-of-bitmap-from-the-actual-uri-before-scale-loading
+
+        AssetFileDescriptor fileDescriptor = null;
+        fileDescriptor = context.getContentResolver().openAssetFileDescriptor(mImageUri, "r");
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = inSampleSize;
+
+        return BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor(), null, options);
+    }
 }

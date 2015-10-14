@@ -1,8 +1,10 @@
 package com.gmail.fedorenko.kostia.app1lesson4;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,26 +13,30 @@ import java.util.ArrayList;
  */
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
-    private int count = 0;
     private ArrayList<Item> ItemList;
     private ArrayList<String> titles;
 
     public MyPagerAdapter(FragmentManager fm, ArrayList<Item> itemList, ArrayList<String> titles) {
         super(fm);
-        ItemList = itemList;
+        this.ItemList = itemList;
         this.titles = titles;
     }
 
     @Override
     public Fragment getItem(int position) {
-        Item item = ItemList.get(position);
-        ShowItemFragment fragment = ShowItemFragment.newInstance(item);
-        return fragment;
+        Fragment showItemFragment =new ShowItemFragment();
+
+        Bundle args=new Bundle();
+        args.putParcelable(Item.class.getName(), ItemList.get(position));
+        Log.i("PagerAdapter", ItemList.get(position).getPlace());
+
+        showItemFragment.setArguments(args);
+        return (Fragment)showItemFragment;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return this.ItemList.size();
     }
 
     @Override

@@ -79,8 +79,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     item.setPlace(cursor.getString(1));
                     item.setTime(cursor.getString(2));
                     item.setDate(cursor.getString(3));
-                    item.setRegion(cursor.getString(5));
-                    item.setUri(cursor.getString(6));
+                    item.setRegion(cursor.getString(4));
+                    item.setUri(cursor.getString(5));
                     items.add(item);
                 } while (cursor.moveToNext());
             }
@@ -149,8 +149,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             item.setPlace(cursor.getString(1));
             item.setTime(cursor.getString(2));
             item.setDate(cursor.getString(3));
-            item.setRegion(cursor.getString(5));
-            item.setUri(cursor.getString(6));
+            item.setRegion(cursor.getString(4));
+            item.setUri(cursor.getString(5));
 
             Log.d("getItem(" + id + ")", item.toString());
         } catch (Exception ex) {
@@ -190,8 +190,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             item.setPlace(cursor.getString(1));
             item.setTime(cursor.getString(2));
             item.setDate(cursor.getString(3));
-            item.setRegion(cursor.getString(5));
-            item.setUri(cursor.getString(6));
+            item.setRegion(cursor.getString(4));
+            item.setUri(cursor.getString(5));
 
             Log.d("getItem(" + desc + ")", item.toString());
         } catch (Exception ex) {

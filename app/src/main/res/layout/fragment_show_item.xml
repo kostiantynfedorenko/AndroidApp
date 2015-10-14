@@ -1,17 +1,95 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gmail.fedorenko.kostia.app1lesson4.ShowItemFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-
+    android:orientation="vertical">
+        <ImageView
+            android:id="@+id/show_image"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"
+            android:background="@android:color/background_light" />
     <TextView
-        android:id="@+id/textShow_item"
+        android:id="@+id/show_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="123"
-        android:textSize="40dp"
+        android:padding="2dp"
         android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+        android:textSize="@dimen/abc_action_bar_icon_vertical_padding_material"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Description"
+        android:gravity="center"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/show_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/abc_action_bar_icon_vertical_padding_material"
+            android:layout_weight="1"
+            android:text = "Date"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/show_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/abc_action_bar_icon_vertical_padding_material"
+            android:layout_weight="1"
+            android:text = "Time"
+            android:gravity="center"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/textShow_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/abc_action_bar_icon_vertical_padding_material"
+            android:text = "Район: " />
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>
