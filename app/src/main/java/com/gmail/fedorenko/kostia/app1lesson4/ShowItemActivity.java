@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,41 +16,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 //GITTEST
 /**
  * Created by kfedoren on 23.09.2015.
  */
 public class ShowItemActivity extends ActionBarActivity {
     private static final String TAG = "ShowItemActivity";
-    private static TextView showtime;
-    private static TextView showdate;
-    private static TextView showdesc;
-    private static TextView showregion;
-    private static ImageView showimage;
-    private String desc;
-    private String date;
-    private String time;
-    private Bitmap bmp;
-    private String region;
     private Item itemShow;
+    private ViewPager viewPager;
+    private ArrayList<Item> ItemList;
+    private ArrayList<String> titles;
+    private MySQLiteHelper db;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_item);
         Bundle data = getIntent().getExtras();
         itemShow = (Item) data.getParcelable("item");
-        showimage = (ImageView) findViewById(R.id.show_image);
-        showtime = (TextView) findViewById(R.id.show_time);
-        showdate = (TextView) findViewById(R.id.show_date);
-        showdesc = (TextView) findViewById(R.id.show_desc);
-        showregion = (TextView) findViewById(R.id.show_region);
+        db = new MySQLiteHelper(this);
+        ItemList = db.getAllItems();
+        titles = db.getItemPlaces();
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
-  //      showimage.setImageBitmap(itemShow.getImage());
-        showimage.setImageURI(Uri.parse(itemShow.getUri()));
-        showdate.setText("Date: " + itemShow.getDate());
-        showtime.setText("Time: " + itemShow.getTime());
-        showdesc.setText("Description: " +itemShow.getPlace());
-        showregion.setText("Region: " + itemShow.getRegion());
     }
 
     @Override
@@ -70,5 +62,12 @@ public class ShowItemActivity extends ActionBarActivity {
                 break;
         }
         return true;
+    }
+    private void setupViewPager(ViewPager viewPager) {
+
+       MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager(), ItemList, titles);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(itemShow.getId());
+
     }
 }

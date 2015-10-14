@@ -148,10 +148,6 @@ public class AddNewItemActivity extends ActionBarActivity implements RegionPicke
         //start camera intent
         startActivityForResult(intent, REQUEST_CODE_NEW_IMAGE);
 
- //       intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-  //      if (intent.resolveActivity(getPackageManager()) != null) {
-   //         startActivityForResult(intent, REQUEST_CODE_NEW_IMAGE);
-    //    }
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Created by kfedoren on 22.09.2015.
  */
 public class MySQLiteHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "testtable";
     private static final String TAG = "MySQLiteHelper";
 
@@ -32,7 +32,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 Item.KEY_PLACE + " TEXT, " +
                 Item.KEY_TIME + " TEXT, " +
                 Item.KEY_DATE + " TEXT, " +
-                Item.KEY_IMAGE + " BLOB, " +
                 Item.KEY_REGION + " TEXT, " +
                 Item.KEY_URI + " TEXT)";
 
@@ -50,7 +49,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             values.put(item.KEY_PLACE, item.getPlace());
             values.put(item.KEY_TIME, item.getTime());
             values.put(item.KEY_DATE, item.getDate());
-            values.put(item.KEY_IMAGE, Util.bitmapToByteArray(item.getImage()));
             values.put(item.KEY_REGION, item.getRegion());
             values.put(item.KEY_URI, item.getUri());
             //Insert
@@ -81,7 +79,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     item.setPlace(cursor.getString(1));
                     item.setTime(cursor.getString(2));
                     item.setDate(cursor.getString(3));
-                    item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
                     item.setRegion(cursor.getString(5));
                     item.setUri(cursor.getString(6));
                     items.add(item);
@@ -95,35 +92,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         }
         return items;
-    }
-
-    public int updateAd(Item item) {
-        // 1. get reference to writable DB
-        SQLiteDatabase db = null;
-        Integer i = null;
-        try {
-            db = this.getWritableDatabase();
-
-            // 2. create ContentValues to add key "column"/value
-            ContentValues values = new ContentValues();
-            values.put(item.KEY_PLACE, item.getPlace());
-            values.put(item.KEY_TIME, item.getTime());
-            values.put(item.KEY_DATE, item.getDate());
-            values.put(item.KEY_IMAGE, Util.bitmapToByteArray(item.getImage()));
-            values.put(item.KEY_REGION, item.getRegion());
-            values.put(item.KEY_URI, item.getUri());
-
-            // 3. updating row
-            i = db.update(item.TABLE_NAME, values, item.KEY_ID + " = ?",
-                    new String[]{String.valueOf(item.getId())});
-        } catch (Exception ex) {
-            Log.e(TAG, ex.toString());
-        } finally {
-            if (null != db) {
-                db.close();
-            }
-        }
-        return i;
     }
 
     public void deleteItem(Item item) {
@@ -181,7 +149,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             item.setPlace(cursor.getString(1));
             item.setTime(cursor.getString(2));
             item.setDate(cursor.getString(3));
-            item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
             item.setRegion(cursor.getString(5));
             item.setUri(cursor.getString(6));
 
@@ -223,7 +190,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             item.setPlace(cursor.getString(1));
             item.setTime(cursor.getString(2));
             item.setDate(cursor.getString(3));
-            item.setImage(Util.byteArrayToBitmap(cursor.getBlob(4)));
             item.setRegion(cursor.getString(5));
             item.setUri(cursor.getString(6));
 
@@ -236,6 +202,28 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         }
         return item;
+    }
+
+    public ArrayList<String> getItemPlaces() {
+        ArrayList<String> places = new ArrayList<>();
+        String query = "SELECT * FROM " + Item.TABLE_NAME;
+        SQLiteDatabase db = null;
+        try {
+            db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    places.add(cursor.getString(1));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, ex.toString());
+        } finally {
+            if (null != db) {
+                db.close();
+            }
+        }
+        return places;
     }
 
 }

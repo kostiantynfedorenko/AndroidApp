@@ -19,11 +19,10 @@ public class Item implements Parcelable {
     public static final String KEY_PLACE = "place";
     public static final String KEY_TIME = "time";
     public static final String KEY_DATE = "date";
-    public static final String KEY_IMAGE = "image";
     public static final String KEY_REGION = "region";
     public static final String KEY_URI = "uri";
 
-    public static final String[] COLUMNS = {KEY_ID, KEY_PLACE, KEY_TIME, KEY_DATE, KEY_IMAGE, KEY_REGION, KEY_URI};
+    public static final String[] COLUMNS = {KEY_ID, KEY_PLACE, KEY_TIME, KEY_DATE, KEY_REGION, KEY_URI};
 
     private int id;
     private String place;
@@ -31,16 +30,14 @@ public class Item implements Parcelable {
     private String date;
     private String region;
     private String uri;
-    private Bitmap image;
 
     public Item() {
     }
 
-    public Item(String place, String time, String date, Bitmap image, String region, String uri) {
+    public Item(String place, String time, String date, String region, String uri) {
         this.place = place;
         this.time = time;
         this.date = date;
-        this.image = image;
         this.region = region;
         this.uri = uri;
     }
@@ -85,13 +82,6 @@ public class Item implements Parcelable {
         this.date = date;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
-
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
 
     public String getRegion() {
         return region;
@@ -127,13 +117,9 @@ public class Item implements Parcelable {
         this.date = dataString[2];
         this.region = dataString[3];
         this.uri = dataString[4];
-        int[] dataInt = new int[2];
+        int[] dataInt = new int[1];
         in.readIntArray(dataInt);
         this.id = dataInt[0];
-        int byteLength = dataInt[1];
-        byte[] dataByte = new byte[byteLength];
-        in.readByteArray(dataByte);
-        this.image = Util.byteArrayToBitmap(dataByte);
     }
 
     @Override
@@ -145,11 +131,6 @@ public class Item implements Parcelable {
                 this.region,
                 this.uri
         });
-        dest.writeIntArray(new int[]{
-                this.id,
-                Util.bitmapToByteArray(this.image).length
-        });
-        dest.writeByteArray(Util.bitmapToByteArray(this.image));
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){

@@ -23,4 +23,7 @@
     <string name ="custom_adapter">Use custom adapter</string>
     <string name ="simple_adapter">Use simple adapter</string>
     <string name ="cursor_adapter">Use cursor adapter</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

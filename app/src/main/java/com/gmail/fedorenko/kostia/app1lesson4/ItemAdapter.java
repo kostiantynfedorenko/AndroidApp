@@ -2,6 +2,7 @@ package com.gmail.fedorenko.kostia.app1lesson4;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,11 +40,10 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         String placeStr = values.get(position).getPlace();
         String dateStr = values.get(position).getDate();
         String timeStr = values.get(position).getTime();
-        Bitmap image = values.get(position).getImage();
 
         place.setText(placeStr);
         dateTime.setText("On: " + dateStr + "; at: " + timeStr);
-        icon.setImageBitmap(image);
+        icon.setImageURI(Uri.parse(values.get(position).getUri()));
         return rowView;
     }
 }
